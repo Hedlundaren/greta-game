@@ -1,4 +1,4 @@
-# typescript-expo-apollo-boilerplate
+# greta-game
 Clean boilerplate for TypeScript + Expo (React Native) + React Apollo (GraphQL)
 
 ## What is this?
@@ -14,8 +14,8 @@ We use TypeScript instead of JavaScript for static type checking.
 
 ## How to run
 ```bash
-$ git clone https://github.com/dai-shi/typescript-expo-apollo-boilerplate.git
-$ cd typescript-expo-apollo-boilerplate
+$ git clone https://github.com/Hedlundaren/greta-game.git
+$ cd greta-game
 $ npm install
 $ npm start
 ```
