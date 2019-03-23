@@ -1,15 +1,8 @@
+import { AppLoading, Asset, Font, ScreenOrientation } from 'expo'
 import * as React from 'react'
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import {AppLoading, Asset, Font} from 'expo'
-import Scene from './containers/Scene/Scene'
-import AppNavigator from './navigation/AppNavigator'
+import SceneContainer from './containers/SceneContainer/SceneContainer'
 
 
 const styles = StyleSheet.create({
@@ -32,6 +25,11 @@ interface States {
 export default class App extends React.Component<Props, States> {
   public state = {
     isLoadingComplete: false,
+  }
+
+  constructor(p: Props) {
+    super(p)
+    ScreenOrientation.allow(ScreenOrientation.Orientation.PORTRAIT)
   }
 
   private loadResourcesAsync = async () => {
@@ -69,7 +67,7 @@ export default class App extends React.Component<Props, States> {
 
     return (
         <View style={styles.container}>
-          <Scene/>
+          <SceneContainer />
         </View>
     )
   }
