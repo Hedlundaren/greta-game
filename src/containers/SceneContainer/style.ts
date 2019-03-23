@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#c3c',
+    // backgroundColor: '#c3c',
+    position: 'absolute',
     height: '15%',
     width: '100%',
     justifyContent: 'center',

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { Text, View } from 'react-native'
 import GestureRecognizer from 'react-native-swipe-gestures'
 
-import { Scene } from '../../assets/scene/Scene'
+import { Scene, SceneData } from '../../assets/Scene/Scene';
 import { styles } from './style'
 
 
@@ -13,7 +13,7 @@ interface State {
 }
 
 interface Props {
-  
+  sceneData: SceneData
 }
 
 export default class SceneContainer extends React.Component<Props, State> {
@@ -22,7 +22,7 @@ export default class SceneContainer extends React.Component<Props, State> {
 
   constructor(p: Props) {
     super(p)
-    this._scene = new Scene()
+    this._scene = new Scene(p.sceneData)
     this.state ={ 
       title: 'Greta Game'
     }
@@ -40,6 +40,9 @@ export default class SceneContainer extends React.Component<Props, State> {
   onSwipeRight = () => {
     this._scene.onSwipeRight()
   }
+  onSwipeLeft = () => {
+    this._scene.onSwipeLeft()
+  }
 
   public render() {
     const { title } = this.state
@@ -55,6 +58,7 @@ export default class SceneContainer extends React.Component<Props, State> {
         onSwipeUp={this.onSwipeUp}
         onSwipeDown={this.onSwipeDown}
         onSwipeRight={this.onSwipeRight}
+        onSwipeLeft={this.onSwipeLeft}
         config={config}
         style={styles.gestureContainer}
       >
