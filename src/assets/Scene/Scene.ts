@@ -34,7 +34,7 @@ export class Scene {
     this._ratio = 0
     this._background = new Background(data.backgroundTexture)
     const startingPosition = new THREE.Vector2(-20, -20)
-    this._player = new Player(startingPosition, this._texture)
+    this._player = new Player(startingPosition, data.runningTextures)
 
   }
 

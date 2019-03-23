@@ -2,6 +2,8 @@ import ExpoTHREE, { THREE } from 'expo-three'
 
 import { fragmentShader } from '../shaders/fragmentShader'
 import { vertexShader } from '../shaders/vertexShader'
+import { Sprite } from 'expo-three';
+import Texture from 'expo-three';
 
 const GRAVITY_CONSTANT = 9.82
 const DASHING_CONSTANT = 9.82
@@ -24,21 +26,22 @@ export class Player {
   private _dashCount: number
   private _rollFrames: number
   private _material: any
+  private _sprite: THREE.Sprite
+  private _textures: THREE.Texture[]
+  private _textureIndex: number
+  private _framesPerImage: number
+  private _frameCount: number
 
-  constructor(pos: THREE.Vector2, texture: any) {
+  constructor(pos: THREE.Vector2, textures: any) {
 
-    const loader = new THREE.TextureLoader();
-    this._material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 1.0 },
-        texture1: { type: 't', value: 0, texture }
-      },
-      vertexShader,
-      fragmentShader
-    })
-
-    this._mesh = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), this._material)
-    this._mesh.position.set(0, 0, 0)
+    this._material = new THREE.SpriteMaterial({ map: textures[0], color: 0xffffff });
+    this._sprite = new THREE.Sprite(this._material);
+    this._sprite.scale.set(20, 30, 1)
+    this._sprite.position.set(pos.x, pos.y, 0)
+    this._textures = [...textures]
+    this._framesPerImage = 10
+    this._frameCount = 0
+    this._textureIndex = 0
     this._velocity = new THREE.Vector2(0, 1)
     this._defaultPosition = new THREE.Vector2(pos.x, pos.y)
     this._position = new THREE.Vector2(pos.x, pos.y)
@@ -108,7 +111,7 @@ export class Player {
   }
 
   mesh() {
-    return this._mesh
+    return this._sprite
   }
 
   calculatePosition(deltaTime: number) {
@@ -158,9 +161,18 @@ export class Player {
   }
 
   render(time: number, deltaTime: number) {
-    this._material.uniforms.time.value = time
+    // this._material.uniforms.time.value = time
     this.calculatePosition(deltaTime)
-    this._mesh.position.x = this._position.x
-    this._mesh.position.y = this._position.y
+    this._frameCount++
+    if(this._frameCount > this._framesPerImage) {
+      this._frameCount = 0
+      this._textureIndex--
+      if(this._textureIndex < 0) {
+        this._textureIndex = this._textures.length - 1
+      }
+      this._material.map = this._textures[this._textureIndex]
+    }
+    this._sprite.position.x = this._position.x
+    this._sprite.position.y = this._position.y
   }
 }

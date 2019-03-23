@@ -4,6 +4,8 @@ import { StyleSheet, View } from 'react-native'
 import SceneContainer from './containers/SceneContainer/SceneContainer'
 import ExpoTHREE from 'expo-three';
 import { SceneData } from './assets/Scene/Scene';
+import { loadTextures } from './utils/loadTextures';
+import { loadRunningTextures } from './utils/loadRunningTextures';
 
 
 const styles = StyleSheet.create({
@@ -40,9 +42,8 @@ export default class App extends React.Component<Props, States> {
   private loadResourcesAsync = async () => {
     await Promise.all([
       Asset.loadAsync([
-        // this.state.texture = await ExpoTHREE.loadAsync('https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png')
-        this.state.backgroundTexture = await ExpoTHREE.loadAsync(require('./assets/images/Background2.png'))
-
+        this.state.runningTextures = await loadRunningTextures(),
+        this.state.backgroundTexture = await ExpoTHREE.loadAsync(require('./assets/images/background/Background.png'))
       ]),
       Font.loadAsync({
         // ...
