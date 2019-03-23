@@ -19,9 +19,9 @@ interface Props {
 export default class SceneContainer extends React.Component<Props, State> {
 
   private _scene: Scene
+
   constructor(p: Props) {
     super(p)
-
     this._scene = new Scene()
     this.state ={ 
       title: 'Greta Game'
@@ -31,7 +31,6 @@ export default class SceneContainer extends React.Component<Props, State> {
   setTitle = (title: string) => {
     this.setState({title})
   }
-
   onSwipeUp = () => {
     this._scene.onSwipeUp()
   }
@@ -47,7 +46,7 @@ export default class SceneContainer extends React.Component<Props, State> {
 
     const config = {
       velocityThreshold: 0.01,
-      directionalOffsetThreshold: 85,
+      directionalOffsetThreshold: 55,
       gestureIsClickThreshold: 1,
     }
 
@@ -57,13 +56,13 @@ export default class SceneContainer extends React.Component<Props, State> {
         onSwipeDown={this.onSwipeDown}
         onSwipeRight={this.onSwipeRight}
         config={config}
-        style={styles.container}
+        style={styles.gestureContainer}
       >
         <View style={styles.header}>
           <Text style={styles.text}>{title}</Text>
         </View>
         <GraphicsView
-          style={styles.container}
+          style={styles.graphicsContainer}
           onContextCreate={this._scene.init}
           onRender={this._scene.render}
         />
