@@ -4,6 +4,7 @@ import { fragmentShader } from '../shaders/fragmentShader'
 import { vertexShader } from '../shaders/vertexShader'
 import { Sprite } from 'expo-three';
 import Texture from 'expo-three';
+import { SceneData } from '../Scene/Scene';
 
 const GRAVITY_CONSTANT = 9.82
 const DASHING_CONSTANT = 9.82
@@ -31,15 +32,17 @@ export class Player {
   private _textureIndex: number
   private _framesPerImage: number
   private _frameCount: number
+  private _sceneData: SceneData
 
-  constructor(pos: THREE.Vector2, textures: any) {
+  constructor(pos: THREE.Vector2, sceneData: SceneData) {
 
-    this._material = new THREE.SpriteMaterial({ map: textures[0], color: 0xffffff });
+    this._sceneData = sceneData
+    this._material = new THREE.SpriteMaterial({ map: sceneData.runningTextures[0], color: 0xffffff });
     this._sprite = new THREE.Sprite(this._material);
     this._sprite.scale.set(20, 30, 1)
     this._sprite.position.set(pos.x, pos.y, 0)
-    this._textures = [...textures]
-    this._framesPerImage = 10
+    this._textures = [...sceneData.runningTextures]
+    this._framesPerImage = 6
     this._frameCount = 0
     this._textureIndex = 0
     this._velocity = new THREE.Vector2(0, 1)
@@ -52,7 +55,22 @@ export class Player {
   }
 
   setState(state: PLAYER_STATE) {
-    this._state = state
+    if (this._state !== state) {
+      this._state = state
+      this._textureIndex = 0
+      if (this.isJumping()) {
+        this._textures = [...this._sceneData.jumpingTextures]
+      }
+      if (this.isRolling()) {
+        this._textures = [...this._sceneData.rollingTextures]
+      }
+      if (this.isDashing()) {
+        this._textures = [...this._sceneData.dashingTextures]
+      }
+      if (this.isRunning()) {
+        this._textures = [...this._sceneData.runningTextures]
+      }
+    }
   }
 
   isDashing() { return this._state === PLAYER_STATE.DASHING }
@@ -73,7 +91,7 @@ export class Player {
     this._position.y = this._defaultPosition.y
     this._jumpCount = 0
     this._dashCount = 0
-    if(this.isJumping()) {
+    if (this.isJumping()) {
       this.setState(PLAYER_STATE.RUNNING)
     }
   }
@@ -82,7 +100,7 @@ export class Player {
     this.setState(PLAYER_STATE.ROLLING)
     this._velocity.y = -30
     this._velocity.x = 0
-    this._rollFrames = 420
+    this._rollFrames = 120
   }
 
   rollFinish() {
@@ -91,7 +109,7 @@ export class Player {
   }
 
   dash() {
-    if (this.isJumping() && this._dashCount < 1) {
+    if ((this.isJumping() || this.isRunning()) && this._dashCount < 1) {
       this.setState(PLAYER_STATE.DASHING)
       this._velocity.x = 30
       this._dashCount++
@@ -160,15 +178,16 @@ export class Player {
     }
   }
 
+  position() { return this._position }
+
   render(time: number, deltaTime: number) {
-    // this._material.uniforms.time.value = time
     this.calculatePosition(deltaTime)
     this._frameCount++
-    if(this._frameCount > this._framesPerImage) {
+    if (this._frameCount > this._framesPerImage) {
       this._frameCount = 0
-      this._textureIndex--
-      if(this._textureIndex < 0) {
-        this._textureIndex = this._textures.length - 1
+      this._textureIndex++
+      if (this._textureIndex > this._textures.length - 1) {
+        this._textureIndex = 0
       }
       this._material.map = this._textures[this._textureIndex]
     }

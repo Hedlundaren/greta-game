@@ -1,6 +1,6 @@
 import { THREE, Texture, Sprite } from 'expo-three'
 
-export class Background {
+export class Foreground {
   private _texture: Texture
   private _sprite1: Sprite
   private _sprite2: Sprite
@@ -14,8 +14,8 @@ export class Background {
     this._sprite2 = new THREE.Sprite(spriteMaterial);
     this._sprite1.scale.set(500, 133.4, 1)
     this._sprite2.scale.set(502, 133.4, 1)
-    this._sprite1.position.set(-250, 0, -2)
-    this._sprite2.position.set(250, 0, -2)
+    this._sprite1.position.set(-250, -17, -1)
+    this._sprite2.position.set(250, -17, -1)
   }
 
   sprite() {

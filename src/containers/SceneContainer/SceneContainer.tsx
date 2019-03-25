@@ -8,7 +8,6 @@ import { styles } from './style'
 
 
 interface State {
-  // backgroundColor: string
   title: string
 }
 
@@ -48,9 +47,9 @@ export default class SceneContainer extends React.Component<Props, State> {
     const { title } = this.state
 
     const config = {
-      velocityThreshold: 0.01,
-      directionalOffsetThreshold: 55,
-      gestureIsClickThreshold: 1,
+      velocityThreshold: 0.001,
+      directionalOffsetThreshold: 40,
+      gestureIsClickThreshold: 0.01,
     }
 
     return (
@@ -61,12 +60,13 @@ export default class SceneContainer extends React.Component<Props, State> {
         onSwipeLeft={this.onSwipeLeft}
         config={config}
         style={styles.gestureContainer}
-      >
+        >
         <View style={styles.header}>
           <Text style={styles.text}>{title}</Text>
         </View>
         <GraphicsView
           style={styles.graphicsContainer}
+          onPress={this.onSwipeUp}
           onContextCreate={this._scene.init}
           onRender={this._scene.render}
         />
