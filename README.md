@@ -1,16 +1,13 @@
 # greta-game
-Clean boilerplate for TypeScript + Expo (React Native) + React Apollo (GraphQL)
+Epic game
 
 ## What is this?
-This is example base code to use React Native and GraphQL.
-We use Expo to ease building the environment.
-We use React Apollo to use GraphQL.
-We use TypeScript instead of JavaScript for static type checking.
+This is an epic game made with Typescript and Expo (React Native) for IOS and Android.
 
 ## Features
-- minimal code without extra configs
-- no-any/noImplicitAny configs for TypeScript
-- client-side mocking for developing before building a GraphQL server
+- Jump
+- Collect cans
+- Save the world
 
 ## How to run
 ```bash
@@ -19,8 +16,3 @@ $ cd greta-game
 $ npm install
 $ npm start
 ```
-
-## Blogs
-
-- [Clean Expo (React Native) + React Apollo (GraphQL) + TypeScript boilerplate](https://medium.com/@dai_shi/clean-expo-react-native-react-apollo-graphql-typescript-boilerplate-89bf6ff940de)
-- [Creating a Minimal Expo React Native Project with TypeScript and Jest](https://medium.com/@dai_shi/creating-a-minimal-expo-react-native-project-with-typescript-and-jest-5979ab8d7c15)
