@@ -17,11 +17,12 @@ export class Can {
     this._material = new THREE.SpriteMaterial({ map: sceneData.canTextures[0], color: 0xffffff })
     this._sprite = new THREE.Sprite(this._material)
     const spread = 50
-    this._sprite.scale.set(36, 20, 1)
+    const scale = 0.8
+    this._sprite.scale.set(36 * scale, 20 * scale, 1)
     this._position = new THREE.Vector2(Math.random() * spread, Math.random() * spread)
     this._framesPerImage = 15
     this._frameCount = 0
-    this._textureIndex = 0//Math.floor(Math.random() * (this._textures.length - 1))
+    this._textureIndex = 0
   }
 
   sprite() {

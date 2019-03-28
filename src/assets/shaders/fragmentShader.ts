@@ -1,10 +1,13 @@
 export const fragmentShader = `
 varying vec2 vUv;
-uniform sampler2D texture1;
+uniform sampler2D backgroundTexture;
+uniform sampler2D sceneTexture;
 uniform float time;
 
 void main() {
   
-  gl_FragColor = texture2D(texture1, vUv);
+  vec3 game = texture2D(sceneTexture, vUv).xyx;
+  vec3 background = texture2D(backgroundTexture, vUv).xyx;
+  gl_FragColor = vec4(game.x, 0, background.x, 1);
 }
 `

@@ -1,6 +1,7 @@
 import ExpoTHREE from 'expo-three';
 export const loadDashingTextures = async () => {
-  const textures = []
+
+  const textures: ExpoTHREE.Texture[] = []
   textures.push(await ExpoTHREE.loadAsync(require('../assets/images/running-example/0.png')))
   textures.push(await ExpoTHREE.loadAsync(require('../assets/images/running-example/1.png')))
   textures.push(await ExpoTHREE.loadAsync(require('../assets/images/running-example/2.png')))
