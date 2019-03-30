@@ -3,14 +3,16 @@ import { SceneData } from './Scene'
 
 const GRAVITY_CONSTANT = 9.82
 const DASHING_CONSTANT = 9.82
-const MIN_FRAMES_BETWEEN_INPUTS = 6
+const MIN_FRAMES_BETWEEN_INPUTS = 10
 
 enum PLAYER_STATE {
   RUNNING = "RUNNING",
   JUMPING = "JUMPING",
   FALLING = "FALLING",
   ROLLING = "ROLLING",
+  ROLLING_FROM_AIR = "ROLLING_FROM_AIR",
   DASHING = "DASHING",
+  DASHING_BACK = "DASHING_BACK",
 }
 
 export class Player {
@@ -31,13 +33,13 @@ export class Player {
   private _frameCount: number
   private _framesSinceLastInput: number
   private _sceneData: SceneData
+  private _scale: number
 
   constructor(pos: THREE.Vector2, sceneData: SceneData) {
 
     this._sceneData = sceneData
     this._material = new THREE.SpriteMaterial({ map: sceneData.runningTextures[0], color: 0xffffff });
     this._sprite = new THREE.Sprite(this._material);
-    this._sprite.scale.set(20, 30, 1)
     this._sprite.position.set(pos.x, pos.y, 0)
     this._textures = [...sceneData.runningTextures]
     this._framesPerImage = 1
@@ -51,35 +53,57 @@ export class Player {
     this._dashCount = 0
     this._rollFrames = 0
     this._framesSinceLastInput = 0
+    this._scale = 1
+    this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
   }
 
   setState(state: PLAYER_STATE) {
     if (this._state !== state) {
+      console.log(state)
       this._state = state
       this._textureIndex = 0
       if (this.isJumping()) {
         this._textures = [...this._sceneData.jumpingTextures]
+        this._sprite.scale.set(this._scale * 20, this._scale * 30 , 1)
       }
       if (this.isRolling()) {
         this._textures = [...this._sceneData.rollingTextures]
+        this._sprite.scale.set(30 * this._scale, 20 * this._scale, 1)
+      }
+      if (this.isRollingFromAir()) {
+        this._textures = [...this._sceneData.rollingFromAirTextures]
+        this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
       }
       if (this.isDashing()) {
         this._textures = [...this._sceneData.dashingTextures]
+        this._sprite.scale.set(30 * this._scale, 20 * this._scale, 1)
+      }
+      if (this.isDashingBack()) {
+        this._textures = [...this._sceneData.dashingBackTextures]
+        this._sprite.scale.set(30 * this._scale, 20 * this._scale, 1)
       }
       if (this.isRunning()) {
         this._textures = [...this._sceneData.runningTextures]
+        this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
       }
       if (this.isFalling()) {
         this._textures = [...this._sceneData.fallingTextures]
+        this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
+      }
+      if (this.isFalling()) {
+        this._textures = [...this._sceneData.fallingTextures]
+        this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
       }
     }
   }
 
   isDashing() { return this._state === PLAYER_STATE.DASHING }
+  isDashingBack() { return this._state === PLAYER_STATE.DASHING_BACK }
   isJumping() { return this._state === PLAYER_STATE.JUMPING }
   isRunning() { return this._state === PLAYER_STATE.RUNNING }
   isRolling() { return this._state === PLAYER_STATE.ROLLING }
   isFalling() { return this._state === PLAYER_STATE.FALLING }
+  isRollingFromAir() { return this._state === PLAYER_STATE.ROLLING_FROM_AIR }
 
   isMovable = () => {
     if (this._framesSinceLastInput > MIN_FRAMES_BETWEEN_INPUTS) {
@@ -109,14 +133,22 @@ export class Player {
     if (this.isFalling()) {
       this.setState(PLAYER_STATE.RUNNING)
     }
+    if (this.isRollingFromAir()) {
+      this.setState(PLAYER_STATE.ROLLING)
+    }
   }
 
   roll() {
     if (this.isMovable()) {
-      this.setState(PLAYER_STATE.ROLLING)
+      if(this.isJumping() || this.isDashing() || this.isFalling()) {
+        this.setState(PLAYER_STATE.ROLLING_FROM_AIR)
+      } else {
+        this.setState(PLAYER_STATE.ROLLING)
+      }
+
       this._velocity.y = -30
       this._velocity.x = 0
-      this._rollFrames = 120
+      this._rollFrames = this._framesPerImage * this._textures.length * 2 - 4
       this._dashCount = 0
     }
 
@@ -137,6 +169,7 @@ export class Player {
 
   backDash() {
     if (this.isDashing() && this.isMovable()) {
+      this.setState(PLAYER_STATE.DASHING_BACK)
       this._velocity.x = -30
     }
   }
@@ -195,7 +228,7 @@ export class Player {
     }
 
     if (this._position.x < this._defaultPosition.x) {
-      if (this.isDashing()) {
+      if (this.isDashing() || this.isDashingBack()) {
         this.dashFinish()
       }
       if (this.isJumping() || this.isFalling()) {

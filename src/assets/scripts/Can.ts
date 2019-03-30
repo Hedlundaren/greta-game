@@ -17,8 +17,8 @@ export class Can {
     this._material = new THREE.SpriteMaterial({ map: sceneData.canTextures[0], color: 0xffffff })
     this._sprite = new THREE.Sprite(this._material)
     const spread = 50
-    const scale = 0.8
-    this._sprite.scale.set(15 * scale, 24 * scale, 1)
+    const scale = 10
+    this._sprite.scale.set(scale, 1.42 * scale, 1)
     this._position = new THREE.Vector2(Math.random() * spread, Math.random() * spread)
     this._framesPerImage = 4
     this._frameCount = 0
