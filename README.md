@@ -1,5 +1,5 @@
-# greta-game
-Epic game
+# Greta Game
+Epic game. Collect deposit cans to save the environment.
 
 ## What is this?
 This is an epic game made with Typescript and Expo (React Native) for IOS and Android.
@@ -13,6 +13,6 @@ This is an epic game made with Typescript and Expo (React Native) for IOS and An
 ```bash
 $ git clone https://github.com/Hedlundaren/greta-game.git
 $ cd greta-game
-$ npm install
-$ npm start
+$ yarn
+$ yarn start
 ```
