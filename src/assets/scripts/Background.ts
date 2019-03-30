@@ -13,7 +13,7 @@ export class Background {
     this._sprite1 = new THREE.Sprite(spriteMaterial);
     this._sprite2 = new THREE.Sprite(spriteMaterial);
     this._sprite1.scale.set(500, 133.4, 1)
-    this._sprite2.scale.set(502, 133.4, 1)
+    this._sprite2.scale.set(503, 133.4, 1)
     this._sprite1.position.set(-250, 0, -2)
     this._sprite2.position.set(250, 0, -2)
   }

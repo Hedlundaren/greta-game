@@ -1,9 +1,9 @@
 import { View as GraphicsView } from 'expo-graphics'
 import * as React from 'react'
 
-import { Scene, SceneData } from '../../assets/Scene/Scene';
 import { styles } from './style'
 import GestureRecognizer from '../GestureRecognizer/GestureRecognizer';
+import { Scene, SceneData } from '../../assets/scripts/Scene';
 
 interface State {
   title: string

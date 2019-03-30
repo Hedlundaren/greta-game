@@ -99,7 +99,6 @@ export class Player {
       this._jumpCount++
       this.setState(PLAYER_STATE.JUMPING)
       this._dashCount = 0
-
     }
   }
 

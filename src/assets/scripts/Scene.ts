@@ -8,10 +8,12 @@ import { vertexShader } from '../shaders/vertexShader';
 import { fragmentShader } from '../shaders/fragmentShader';
 import { Audio } from 'expo';
 import { Obstacles } from './Obstacles';
+import { Sky } from './Sky';
 
 export interface SceneData {
   backgroundTexture: Texture,
   foregroundTexture: Texture,
+  skyTexture: Texture,
   meatTexture: Texture,
   oilTexture: Texture,
   strawTexture: Texture,
@@ -39,6 +41,7 @@ export class Scene {
   private _height: number
   private _background: Background
   private _foreground: Foreground
+  private _sky: Sky
   private _collectibles: Collectibles
   private _obstacles: Obstacles
   private _pause: boolean
@@ -49,20 +52,27 @@ export class Scene {
   private _sceneData: SceneData
   private _gl: any
   private _textureData: Float32Array
+  private _groundGroup: THREE.Group
 
   constructor(sceneData: SceneData) {
+    
     this._time = 0
+    this._pause = false
     this._deltaTime = 0.1
     this._width = 0
     this._height = 0
+    
+    this._sceneData = sceneData
     this._background = new Background(sceneData.backgroundTexture, sceneData.backgroundSpeed)
     this._foreground = new Foreground(sceneData.foregroundTexture, sceneData.foregroundSpeed)
+    this._sky = new Sky(sceneData.skyTexture, 0)
+    this._groundGroup = new THREE.Group()
+
     const startingPosition = new THREE.Vector2(-20, -20)
     this._player = new Player(startingPosition, sceneData)
     this._collectibles = new Collectibles(sceneData)
     this._obstacles = new Obstacles(sceneData)
-    this._pause = false
-    this._sceneData = sceneData
+    
     this._textureData = new Float32Array(0)
   }
 
@@ -103,14 +113,17 @@ export class Scene {
     this._camera.position.z = 1
     this._camera.lookAt(0, 0, 0)
 
+    
+    this._groundGroup.add(this._background.sprite())
+    this._groundGroup.add(this._foreground.sprite())
+    this._groundGroup.add(this._collectibles.sprites())
+    this._groundGroup.add(this._obstacles.sprites())
+
+    this._scene.add(this._groundGroup)
     this._scene.add(this._player.mesh())
-    this._scene.add(this._background.sprite())
-    this._scene.add(this._foreground.sprite())
-    this._scene.add(this._collectibles.sprites())
-    this._scene.add(this._obstacles.sprites())
+    this._scene.add(this._sky.sprite())
 
     this._renderTarget = new THREE.WebGLRenderTarget(width, height, { type: THREE.UnsignedByte, format: THREE.RGBAFormat })
-
     this._textureData = new Float32Array(width * height * 4)
     this._textureData.fill(1.0)
 
@@ -135,13 +148,12 @@ export class Scene {
       this._player.render(this._time, this._deltaTime)
       this._background.render(this._deltaTime)
       this._foreground.render(this._deltaTime)
+      this._sky.render(this._time, this._deltaTime)
       this._collectibles.render(this._deltaTime, this._player.position())
       this._obstacles.render(this._deltaTime, this._player.position())
-
       this._renderer.render(this._scene, this._camera)
       this._gl.endFrameEXP()
 
-      // According to documentation
       // Render scene to renderTarget 
       // this._renderer.setRenderTarget(this._renderTarget)
       // this._renderer.clear()
