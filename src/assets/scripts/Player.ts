@@ -1,11 +1,5 @@
-import ExpoTHREE, { THREE } from 'expo-three'
-import { Haptic, Audio, Asset } from 'expo'
-
-import { fragmentShader } from '../shaders/fragmentShader'
-import { vertexShader } from '../shaders/vertexShader'
-import { Sprite } from 'expo-three';
-import Texture from 'expo-three';
-import { SceneData } from '../Scene/Scene';
+import { THREE } from 'expo-three'
+import { SceneData } from './Scene'
 
 const GRAVITY_CONSTANT = 9.82
 const DASHING_CONSTANT = 9.82

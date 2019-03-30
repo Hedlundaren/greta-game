@@ -1,7 +1,7 @@
-import { THREE } from "expo-three"
-import { Can } from "../Can/Can"
-import { SceneData } from "../Scene/Scene"
-import { Haptic } from "expo"
+import { THREE } from 'expo-three'
+import { Can } from './Can'
+import { SceneData } from './Scene'
+import { Haptic } from 'expo'
 
 export class Collectibles {
   private _cans: Can[]

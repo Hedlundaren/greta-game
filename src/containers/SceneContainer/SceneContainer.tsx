@@ -3,9 +3,7 @@ import * as React from 'react'
 
 import { Scene, SceneData } from '../../assets/Scene/Scene';
 import { styles } from './style'
-import { BlurView } from 'expo';
 import GestureRecognizer from '../GestureRecognizer/GestureRecognizer';
-
 
 interface State {
   title: string
@@ -55,9 +53,6 @@ export default class SceneContainer extends React.Component<Props, State> {
   }
   onSwipeLeft = () => {
     this._scene.onSwipeLeft()
-  }
-  onTouchMove = (e: any) => {
-    console.log(e)
   }
 
   public render() {

@@ -1,6 +1,7 @@
 import { THREE } from 'expo-three'
 import * as React from 'react'
-import { View, TouchableWithoutFeedback, TouchableHighlight } from 'react-native'
+import { View } from 'react-native'
+
 import { styles } from './style'
 
 interface Vector2 {
