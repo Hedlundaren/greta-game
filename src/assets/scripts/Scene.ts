@@ -20,6 +20,7 @@ export interface SceneData {
   trumpTexture: Texture,
   runningTextures: Texture[],
   jumpingTextures: Texture[],
+  jumping2Textures: Texture[],
   dashingTextures: Texture[],
   dashingBackTextures: Texture[],
   rollingTextures: Texture[],
@@ -45,7 +46,6 @@ export class Scene {
   private _foreground: Foreground
   private _sky: Sky
   private _collectibles: Collectibles
-  private _obstacles: Obstacles
   private _pause: boolean
   private _renderTarget: THREE.WebGLRenderTarget
   private _scenePostProcessing: THREE.Scene
@@ -73,9 +73,9 @@ export class Scene {
     const startingPosition = new THREE.Vector2(-20, -20)
     this._player = new Player(startingPosition, sceneData)
     this._collectibles = new Collectibles(sceneData)
-    this._obstacles = new Obstacles(sceneData)
     
     this._textureData = new Float32Array(0)
+
   }
 
   onSwipeUp() {
@@ -119,7 +119,6 @@ export class Scene {
     this._groundGroup.add(this._background.sprite())
     this._groundGroup.add(this._foreground.sprite())
     this._groundGroup.add(this._collectibles.sprites())
-    this._groundGroup.add(this._obstacles.sprites())
 
     this._scene.add(this._groundGroup)
     this._scene.add(this._player.mesh())
@@ -151,8 +150,7 @@ export class Scene {
       this._background.render(this._deltaTime)
       this._foreground.render(this._deltaTime)
       this._sky.render(this._time, this._deltaTime)
-      this._collectibles.render(this._deltaTime, this._player.position())
-      this._obstacles.render(this._deltaTime, this._player.position())
+      this._collectibles.render(this._time, this._deltaTime, this._player.position())
       this._renderer.render(this._scene, this._camera)
       this._gl.endFrameEXP()
 

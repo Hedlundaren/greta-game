@@ -19,7 +19,7 @@ export class Can {
     const spread = 50
     const scale = 10
     this._sprite.scale.set(scale, 1.42 * scale, 1)
-    this._position = new THREE.Vector2(Math.random() * spread, Math.random() * spread)
+    this._position = new THREE.Vector2(Math.random() * spread, -200)
     this._framesPerImage = 4
     this._frameCount = 0
     this._textureIndex = 0
@@ -41,7 +41,7 @@ export class Can {
 
   reset() {
     this._position.x = 40
-    this._position.y = Math.random() * 50
+    this._position.y = -200
   }
 
   render(deltaTime: number, playerPosition: THREE.Vector2) {

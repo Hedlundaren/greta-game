@@ -2,7 +2,7 @@ import { THREE } from 'expo-three'
 import { SceneData } from './Scene'
 
 const GRAVITY_CONSTANT = 9.82
-const DASHING_CONSTANT = 9.82
+const DASHING_CONSTANT = 29.82
 const MIN_FRAMES_BETWEEN_INPUTS = 10
 
 enum PLAYER_STATE {
@@ -35,19 +35,19 @@ export class Player {
   private _sceneData: SceneData
   private _scale: number
 
-  constructor(pos: THREE.Vector2, sceneData: SceneData) {
+  constructor(defaultPosition: THREE.Vector2, sceneData: SceneData) {
 
     this._sceneData = sceneData
     this._material = new THREE.SpriteMaterial({ map: sceneData.runningTextures[0], color: 0xffffff });
     this._sprite = new THREE.Sprite(this._material);
-    this._sprite.position.set(pos.x, pos.y, 0)
+    this._sprite.position.set(defaultPosition.x, defaultPosition.y, 0)
     this._textures = [...sceneData.runningTextures]
     this._framesPerImage = 1
     this._frameCount = 0
     this._textureIndex = 0
     this._velocity = new THREE.Vector2(0, 1)
-    this._defaultPosition = new THREE.Vector2(pos.x, pos.y)
-    this._position = new THREE.Vector2(pos.x, pos.y)
+    this._defaultPosition = new THREE.Vector2(defaultPosition.x, defaultPosition.y)
+    this._position = new THREE.Vector2(defaultPosition.x, defaultPosition.y)
     this._state = PLAYER_STATE.RUNNING
     this._jumpCount = 0
     this._dashCount = 0
@@ -59,11 +59,14 @@ export class Player {
 
   setState(state: PLAYER_STATE) {
     if (this._state !== state) {
-      console.log(state)
       this._state = state
       this._textureIndex = 0
       if (this.isJumping()) {
-        this._textures = [...this._sceneData.jumpingTextures]
+        if(Math.random() < 0.8) {
+          this._textures = [...this._sceneData.jumpingTextures]
+        } else {
+          this._textures = [...this._sceneData.jumping2Textures]
+        }
         this._sprite.scale.set(this._scale * 20, this._scale * 30 , 1)
       }
       if (this.isRolling()) {
@@ -118,7 +121,7 @@ export class Player {
     if (this._jumpCount < 2 && this.isMovable()) {
       this._sceneData.jumpingSound.replayAsync({ shouldPlay: true, positionMillis: 0 })
       this._textureIndex = 0
-      this._velocity.y = 30
+      this._velocity.y = 25
       this._velocity.x = 0
       this._jumpCount++
       this.setState(PLAYER_STATE.JUMPING)
@@ -162,7 +165,7 @@ export class Player {
   dash() {
     if (this._dashCount < 1 && this.isMovable()) {
       this.setState(PLAYER_STATE.DASHING)
-      this._velocity.x = 30
+      this._velocity.x = 1.6 * DASHING_CONSTANT
       this._dashCount++
     }
   }
@@ -239,6 +242,7 @@ export class Player {
   }
 
   position() { return this._position }
+  velocity() { return this._velocity }
 
   render(time: number, deltaTime: number) {
     this.calculatePosition(deltaTime)

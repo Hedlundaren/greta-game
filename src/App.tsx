@@ -10,6 +10,7 @@ import { loadDashingTextures } from './utils/loadDashingTextures'
 import { loadDashingBackTextures } from './utils/loadDashingBackTextures'
 import { loadFallingTextures } from './utils/loadFallingTextures'
 import { loadJumpingTextures } from './utils/loadJumpingTextures'
+import { loadJumping2Textures } from './utils/loadJumping2Textures';
 import { loadRollingFromAirTextures } from './utils/loadRollingFromAirTextures'
 import { loadRollingTextures } from './utils/loadRollingTextures'
 import { loadRunningTextures } from './utils/loadRunningTextures'
@@ -43,6 +44,7 @@ export default class App extends React.Component<Props, States> {
     trumpTexture: null,
     runningTextures: [],
     jumpingTextures: [],
+    jumping2Textures: [],
     dashingTextures: [],
     dashingBackTextures: [],
     rollingTextures: [],
@@ -64,6 +66,7 @@ export default class App extends React.Component<Props, States> {
       Asset.loadAsync([
         this.state.runningTextures = await loadRunningTextures(),
         this.state.jumpingTextures = await loadJumpingTextures(),
+        this.state.jumping2Textures = await loadJumping2Textures(),
         this.state.dashingTextures = await loadDashingTextures(),
         this.state.dashingBackTextures = await loadDashingBackTextures(),
         this.state.rollingTextures = await loadRollingTextures(),

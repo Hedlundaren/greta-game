@@ -23,7 +23,7 @@ export class Sky {
 
   render(time: number, deltaTime: number) {
     this._sprite.position.x -= this._speed * deltaTime
-    const skyColor = `rgb(50, 150, ${Math.round(255 * (Math.sin(0.4 * time) * 0.1 + 0.8))})`
+    const skyColor = `rgb(250, 0, ${Math.round(255 * (Math.sin(0.4 * time) * 0.1 + 0.8))})`
     this._material.color.set(skyColor)
     if (this._sprite.position.x < -300) {
       this._sprite.position.x = 700

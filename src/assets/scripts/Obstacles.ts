@@ -5,13 +5,13 @@ import { Obstacle } from './Obstacle';
 
 export class Obstacles {
   private _obstacles: Obstacle[]
-  private _numberOfobstacles: number
+  private _numberOfObstacles: number
 
   constructor(sceneData: SceneData) {
     this._obstacles = []
-    this._numberOfobstacles = 3
+    this._numberOfObstacles = 1
 
-    for (let i = 0; i < this._numberOfobstacles; i++) {
+    for (let i = 0; i < this._numberOfObstacles; i++) {
       const obstacle = new Obstacle(sceneData)
       this._obstacles.push(obstacle)
     }
@@ -25,7 +25,7 @@ export class Obstacles {
     return sprites
   }
 
-  collectObstacle(obstacle: Obstacle) {
+  collision(obstacle: Obstacle) {
     Haptic.selection()
     obstacle.reset()
   }
@@ -33,7 +33,7 @@ export class Obstacles {
   render(deltaTime: number, playerPosition: THREE.Vector2) {
     for (const obstacle of this._obstacles) {
       if (obstacle.isCollected(playerPosition)) {
-        this.collectObstacle(obstacle)
+        this.collision(obstacle)
       }
 
       obstacle.render(deltaTime, playerPosition)

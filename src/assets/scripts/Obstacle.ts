@@ -2,27 +2,21 @@ import { Texture, THREE } from 'expo-three'
 import { SceneData } from './Scene'
 
 export class Obstacle {
-  private _textures: Texture[]
   private _sprite: THREE.Sprite
   private _position: THREE.Vector2
   private _material: any
-  private _framesPerImage: number
-  private _frameCount: number
-  private _textureIndex: number
-  private _speed: number 
+  private _speed: number
+  private _sceneData: SceneData
+  private _scale: number
 
   constructor(sceneData: SceneData) {
-    this._textures = [...sceneData.canTextures]
     this._speed = sceneData.foregroundSpeed
-    this._material = new THREE.SpriteMaterial({ map: sceneData.canTextures[0], color: 0xffffff })
+    this._material = new THREE.SpriteMaterial({ map: sceneData.meatTexture, color: 0xffffff })
     this._sprite = new THREE.Sprite(this._material)
-    const spread = 50
-    const scale = 0.8
-    this._sprite.scale.set(36 * scale, 20 * scale, 1)
-    this._position = new THREE.Vector2(Math.random() * spread, -100)
-    this._framesPerImage = 15
-    this._frameCount = 0
-    this._textureIndex = 0
+    this._scale = 0.8
+    this._sprite.scale.set(30 * this._scale, 30 * this._scale, 1)
+    this._position = new THREE.Vector2(-60, -25)
+    this._sceneData = sceneData
   }
 
   sprite() {
@@ -30,7 +24,7 @@ export class Obstacle {
   }
 
   isCollected(p: THREE.Vector2) {
-    const collisionDistance = 10
+    const collisionDistance = 14
     if (Math.abs(p.x - this._position.x) < collisionDistance && Math.abs(p.y - this._position.y) < collisionDistance) {
       return true
     }
@@ -40,24 +34,33 @@ export class Obstacle {
   setPosition = (p: THREE.Vector2) => { this._position = p }
 
   reset() {
-    this._position.x = 40
-    this._position.y = -200
+    const randomValue = Math.round(Math.random() * 4)
+
+    if (randomValue === 0) {
+      this._material.map = this._sceneData.meatTexture
+      this._sprite.scale.set(30 * this._scale, 30 * this._scale, 1)
+    }
+    else if (randomValue === 1) {
+      this._material.map = this._sceneData.oilTexture
+      this._sprite.scale.set(30 * this._scale, 30 * this._scale, 1)
+    }
+    else if (randomValue === 2) {
+      this._material.map = this._sceneData.strawTexture
+      this._sprite.scale.set(30 * this._scale, 30 * this._scale, 1)
+    }
+    else if (randomValue === 3) {
+      this._material.map = this._sceneData.trumpTexture
+      this._sprite.scale.set(60 * this._scale, 60 * this._scale, 1)
+    }
+
+    this._position.x = 60
+    this._position.y = -205
   }
 
   render(deltaTime: number, playerPosition: THREE.Vector2) {
 
-    this._frameCount++
-    if (this._frameCount > this._framesPerImage) {
-      this._frameCount = 0
-      this._textureIndex--
-      if (this._textureIndex < 0) {
-        this._textureIndex = this._textures.length - 1
-      }
-      this._material.map = this._textures[this._textureIndex]
-    }
-
     this._position.x -= this._speed * deltaTime
-    if (this._position.x < -40) {
+    if (this._position.x < -60) {
       this.reset()
     }
 
