@@ -1,4 +1,6 @@
 export const vertexShader = /*glsl*/`
+
+
 uniform float delta;
 varying vec2 vUv;
 

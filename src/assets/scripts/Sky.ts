@@ -1,32 +1,35 @@
-import { THREE, Texture, Sprite } from 'expo-three'
+import { THREE } from 'expo-three'
+
+import { fragmentShaderSky } from '../shaders/fragmentShaderSky'
+import { vertexShaderSky } from '../shaders/vertexShaderSky'
+import { SceneData } from './Scene'
 
 export class Sky {
-  private _texture: Texture 
-  private _sprite: Sprite
-  private _speed: number
-  private _material: THREE.SpriteMaterial
+  private _mesh: THREE.Mesh
+  private _material: THREE.ShaderMaterial
 
-  constructor(texture: Texture, speed: number) {
-    this._texture = texture
-    this._speed = speed
-    this._material = new THREE.SpriteMaterial({ map: this._texture, color: 0xffffff });
-    this._sprite = new THREE.Sprite(this._material);
-    this._sprite.scale.set(500, 133.4, 1)
-    this._sprite.position.set(0, 0, -2)
+  constructor(width: number, height: number) {
+
+    this._material = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0.0 },
+        resolution: { value: new THREE.Vector2(width, height) },
+      },
+      vertexShader: vertexShaderSky,
+      fragmentShader: fragmentShaderSky
+    })
+
+    const geometry = new THREE.PlaneGeometry(200, 400, 1)
+    this._mesh = new THREE.Mesh(geometry, this._material)
+
+    this._mesh.position.set(0, 0, -2)
   }
 
   sprite() {
-    const group = new THREE.Group()
-    group.add(this._sprite)
-    return group
+    return this._mesh
   }
 
   render(time: number, deltaTime: number) {
-    this._sprite.position.x -= this._speed * deltaTime
-    const skyColor = `rgb(250, 0, ${Math.round(255 * (Math.sin(0.4 * time) * 0.1 + 0.8))})`
-    this._material.color.set(skyColor)
-    if (this._sprite.position.x < -300) {
-      this._sprite.position.x = 700
-    }
+      this._material.uniforms.time.value = time
   }
 }

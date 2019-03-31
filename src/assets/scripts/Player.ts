@@ -62,12 +62,12 @@ export class Player {
       this._state = state
       this._textureIndex = 0
       if (this.isJumping()) {
-        if(Math.random() < 0.8) {
+        if (Math.random() < 0.8) {
           this._textures = [...this._sceneData.jumpingTextures]
         } else {
           this._textures = [...this._sceneData.jumping2Textures]
         }
-        this._sprite.scale.set(this._scale * 20, this._scale * 30 , 1)
+        this._sprite.scale.set(this._scale * 20, this._scale * 30, 1)
       }
       if (this.isRolling()) {
         this._textures = [...this._sceneData.rollingTextures]
@@ -119,9 +119,13 @@ export class Player {
 
   async jump() {
     if (this._jumpCount < 2 && this.isMovable()) {
-      this._sceneData.jumpingSound.replayAsync({ shouldPlay: true, positionMillis: 0 })
+      try {
+        this._sceneData.jumpingSound.replayAsync({ shouldPlay: true, positionMillis: 0 })
+      } catch (e) {
+        console.warn('Could play sound.', e)
+      }
       this._textureIndex = 0
-      this._velocity.y = 25
+      this._velocity.y = 28
       this._velocity.x = 0
       this._jumpCount++
       this.setState(PLAYER_STATE.JUMPING)
@@ -143,7 +147,7 @@ export class Player {
 
   roll() {
     if (this.isMovable()) {
-      if(this.isJumping() || this.isDashing() || this.isFalling()) {
+      if (this.isJumping() || this.isDashing() || this.isFalling()) {
         this.setState(PLAYER_STATE.ROLLING_FROM_AIR)
       } else {
         this.setState(PLAYER_STATE.ROLLING)
@@ -154,7 +158,6 @@ export class Player {
       this._rollFrames = this._framesPerImage * this._textures.length * 2 - 4
       this._dashCount = 0
     }
-
   }
 
   rollFinish() {

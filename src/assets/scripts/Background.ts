@@ -25,9 +25,13 @@ export class Background {
     return group
   }
 
-  render(deltaTime: number) {
+  render(time: number, deltaTime: number) {
     this._sprite1.position.x -= this._speed * deltaTime
     this._sprite2.position.x -= this._speed * deltaTime
+
+    const color = `rgb(255, 255, 255)`
+    this._sprite1.material.color = new THREE.Color(color)
+    this._sprite2.material.color = new THREE.Color(color)
     if (this._sprite1.position.x < -300) {
       this._sprite1.position.x = 700
     }

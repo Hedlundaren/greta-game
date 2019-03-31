@@ -62,6 +62,19 @@ export class Collectibles {
     return sprites
   }
 
+  canSpawnObstacle() {
+    if (Math.abs(this._canSpawner.velocity().y) < 0.5 && this._canSpawner.position().y > 10) {
+      if (!this._canSpawner.isDashing()) {
+        return true
+      }
+    }
+    return false
+  }
+
+  canSpawnCan() {
+
+  }
+
   spawnObstacle() {
     this._obstacles[this._currentObstacleIndex].setPosition(new THREE.Vector2(this._canSpawner.position().x, -25))
     this._currentObstacleIndex++
@@ -88,13 +101,21 @@ export class Collectibles {
   }
 
   collisionObstacle(obstacle: Obstacle) {
-    Haptic.selection()
-    obstacle.reset()
+    try {
+      Haptic.impact()
+      obstacle.reset()
+    } catch (e) {
+      console.warn('Could not perform impact vibration.', e)
+    }
   }
 
   collisionCan(can: Can) {
-    Haptic.selection()
-    can.reset()
+    try {
+      Haptic.selection()
+      can.reset()
+    } catch (e) {
+      console.warn('Could not perform selection vibration.', e)
+    }
   }
 
   render(time: number, deltaTime: number, playerPosition: THREE.Vector2) {
@@ -107,7 +128,7 @@ export class Collectibles {
         this.spawnCan()
       }
     }
-    
+
     if (this._state === 'NO_SPAWN') {
       if (this._frameCount > this._framesOfNoCanSpawn) {
         this._state = 'SPAWN'
@@ -115,13 +136,8 @@ export class Collectibles {
       }
     }
 
-
-
-
-    if (Math.abs(this._canSpawner.velocity().y) < 0.5 && this._canSpawner.position().y > 0) {
-      if (!this._canSpawner.isDashing()) {
-        this.spawnObstacle()
-      }
+    if (this.canSpawnObstacle()) {
+      this.spawnObstacle()
     }
 
     for (const obstacle of this._obstacles) {

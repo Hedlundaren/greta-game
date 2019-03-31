@@ -37,6 +37,7 @@ export default class App extends React.Component<Props, States> {
     isLoadingComplete: false,
     backgroundTexture: null,
     foregroundTexture: null,
+    cloudTexture: null,
     skyTexture: null,
     meatTexture: null,
     oilTexture: null,
@@ -54,6 +55,7 @@ export default class App extends React.Component<Props, States> {
     jumpingSound: new Audio.Sound(),
     foregroundSpeed: 10,
     backgroundSpeed: 2,
+    cloudSpeed: 2.4,
   }
 
   constructor(p: Props) {
@@ -79,6 +81,7 @@ export default class App extends React.Component<Props, States> {
         this.state.trumpTexture = await ExpoTHREE.loadAsync(require('./assets/images/obstacles/trump.png')),
         this.state.backgroundTexture = await ExpoTHREE.loadAsync(require('./assets/images/background/Background.png')),
         this.state.foregroundTexture = await ExpoTHREE.loadAsync(require('./assets/images/foreground/Foreground.png')),
+        this.state.cloudTexture = await ExpoTHREE.loadAsync(require('./assets/images/clouds/cloud1.png')),
         this.state.skyTexture = await ExpoTHREE.loadAsync(require('./assets/images/sky/Sky.png')),
         await this.state.jumpingSound.loadAsync(Asset.fromModule(require('./assets/sounds/pop.mp3'))),
       ]),

@@ -25,7 +25,7 @@ export class Foreground {
     return group
   }
 
-  render(deltaTime: number) {
+  render(time: number, deltaTime: number) {
     this._sprite1.position.x -= this._speed * deltaTime
     this._sprite2.position.x -= this._speed * deltaTime
     if (this._sprite1.position.x < -300) {

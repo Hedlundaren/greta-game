@@ -34,7 +34,7 @@ export class Obstacle {
   setPosition = (p: THREE.Vector2) => { this._position = p }
 
   reset() {
-    const randomValue = Math.round(Math.random() * 4)
+    const randomValue = Math.round(Math.random() * 3)
 
     if (randomValue === 0) {
       this._material.map = this._sceneData.meatTexture
