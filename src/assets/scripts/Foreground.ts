@@ -9,9 +9,9 @@ export class Foreground {
   constructor(texture: Texture, speed: number) {
     this._texture = texture
     this._speed = speed
-    var spriteMaterial = new THREE.SpriteMaterial({ map: this._texture, color: 0xffffff });
-    this._sprite1 = new THREE.Sprite(spriteMaterial);
-    this._sprite2 = new THREE.Sprite(spriteMaterial);
+    var spriteMaterial = new THREE.SpriteMaterial({ map: this._texture, color: 0xffffff })
+    this._sprite1 = new THREE.Sprite(spriteMaterial)
+    this._sprite2 = new THREE.Sprite(spriteMaterial)
     this._sprite1.scale.set(500, 133.4, 1)
     this._sprite2.scale.set(502, 133.4, 1)
     this._sprite1.position.set(-250, -17, -1)

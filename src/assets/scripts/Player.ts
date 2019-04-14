@@ -34,8 +34,9 @@ export class Player {
   private _framesSinceLastInput: number
   private _sceneData: SceneData
   private _scale: number
+  private _isBot: boolean
 
-  constructor(defaultPosition: THREE.Vector2, sceneData: SceneData) {
+  constructor(defaultPosition: THREE.Vector2, sceneData: SceneData, isBot?: boolean) {
 
     this._sceneData = sceneData
     this._material = new THREE.SpriteMaterial({ map: sceneData.runningTextures[0], color: 0xffffff });
@@ -55,6 +56,7 @@ export class Player {
     this._framesSinceLastInput = 0
     this._scale = 1
     this._sprite.scale.set(20 * this._scale, 30 * this._scale, 1)
+    this._isBot = isBot ? isBot : false
   }
 
   setState(state: PLAYER_STATE) {
@@ -119,11 +121,15 @@ export class Player {
 
   async jump() {
     if (this._jumpCount < 2 && this.isMovable()) {
-      try {
-        this._sceneData.jumpingSound.replayAsync({ shouldPlay: true, positionMillis: 0 })
-      } catch (e) {
-        console.warn('Could play sound.', e)
+
+      if (!this._isBot) {
+        try {
+          this._sceneData.jumpingSound.replayAsync({ shouldPlay: true, positionMillis: 0 })
+        } catch (e) {
+          console.warn('Could play sound.', e)
+        }
       }
+      
       this._textureIndex = 0
       this._velocity.y = 28
       this._velocity.x = 0

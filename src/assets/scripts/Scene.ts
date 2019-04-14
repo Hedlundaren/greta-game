@@ -1,15 +1,12 @@
+import { Audio } from 'expo'
 import ExpoTHREE, { Texture, THREE } from 'expo-three'
 
 import { Background } from './Background'
+import { Clouds } from './Clouds'
 import { Collectibles } from './Collectibles'
 import { Foreground } from './Foreground'
 import { Player } from './Player'
-import { vertexShader } from '../shaders/vertexShader';
-import { fragmentShader } from '../shaders/fragmentShader';
-import { Audio } from 'expo';
-import { Obstacles } from './Obstacles';
-import { Sky } from './Sky';
-import { Clouds } from './Clouds';
+import { Sky } from './Sky'
 
 export interface SceneData {
   backgroundTexture: Texture,
@@ -29,10 +26,12 @@ export interface SceneData {
   rollingFromAirTextures: Texture[],
   fallingTextures: Texture[],
   canTextures: Texture[],
+  explosionTextures: Texture[],
   jumpingSound: Audio.Sound,
   foregroundSpeed: number,
   backgroundSpeed: number,
   cloudSpeed: number,
+  useAction: (data: any) => void
 }
 
 export class Scene {
@@ -61,7 +60,6 @@ export class Scene {
   private _groundGroup: THREE.Group
 
   constructor(sceneData: SceneData) {
-    
     this._time = 0
     this._pause = false
     this._deltaTime = 0.1
@@ -79,6 +77,9 @@ export class Scene {
     this._collectibles = new Collectibles(sceneData)
     
     this._textureData = new Float32Array(0)
+  }
+
+  onUpdate () {
 
   }
 
@@ -119,7 +120,6 @@ export class Scene {
     this._camera = new THREE.OrthographicCamera(-width / 10, width / 10, height / 10, -height / 10, 1, 1000);
     this._camera.position.z = 1
     this._camera.lookAt(0, 0, 0)
-
     
     this._groundGroup.add(this._background.sprite())
     this._groundGroup.add(this._foreground.sprite())

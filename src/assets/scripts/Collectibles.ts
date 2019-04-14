@@ -33,7 +33,7 @@ export class Collectibles {
     this._framesOfNoCanSpawn = 400
 
     const startingPosition = new THREE.Vector2(60, -20)
-    this._canSpawner = new Player(startingPosition, sceneData)
+    this._canSpawner = new Player(startingPosition, sceneData, true)
 
     for (let i = 0; i < this._numberOfCans; i++) {
       const can = new Can(sceneData)
@@ -72,10 +72,11 @@ export class Collectibles {
   }
 
   canSpawnCan() {
-
+    
   }
 
   spawnObstacle() {
+    this._obstacles[this._currentObstacleIndex].reset()
     this._obstacles[this._currentObstacleIndex].setPosition(new THREE.Vector2(this._canSpawner.position().x, -25))
     this._currentObstacleIndex++
     if (this._currentObstacleIndex > this._numberOfObstacles - 1) {
@@ -101,18 +102,20 @@ export class Collectibles {
   }
 
   collisionObstacle(obstacle: Obstacle) {
+    obstacle.explode()
+
     try {
       Haptic.impact()
-      obstacle.reset()
     } catch (e) {
       console.warn('Could not perform impact vibration.', e)
     }
   }
 
   collisionCan(can: Can) {
+    can.reset()
+
     try {
       Haptic.selection()
-      can.reset()
     } catch (e) {
       console.warn('Could not perform selection vibration.', e)
     }

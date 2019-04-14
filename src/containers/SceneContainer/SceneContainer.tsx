@@ -17,14 +17,10 @@ interface Props {
 export default class SceneContainer extends React.Component<Props, State> {
 
   private _scene: Scene
-  private _latestX: number
-  private _latestY: number
 
   constructor(p: Props) {
     super(p)
     this._scene = new Scene(p.sceneData)
-    this._latestX = 0
-    this._latestY = 0
     this.state = {
       title: '||',
       paused: false,
@@ -55,6 +51,10 @@ export default class SceneContainer extends React.Component<Props, State> {
     this._scene.onSwipeLeft()
   }
 
+  init = (e: any) => {
+    this._scene.init(e)
+  }
+
   public render() {
     const { title } = this.state
 
@@ -69,7 +69,7 @@ export default class SceneContainer extends React.Component<Props, State> {
       >
         <GraphicsView
           style={styles.graphicsContainer}
-          onContextCreate={this._scene.init}
+          onContextCreate={this.init}
           onRender={this._scene.render}
         />
       </GestureRecognizer>
